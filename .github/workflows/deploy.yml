@@ -29,10 +29,12 @@ jobs:
       - name: Get Code
         uses: actions/checkout@v3
       - name: Cache dependencies
-        uses: actions/cache@v3
+        id: cache-deps
+        uses: ./.github/actions/cached-deps
         with:
-          path: ~/.npm
-          key: ${{ env.CACHE_KEY }}-${{ hashFiles('**/package-lock.json') }}
+          caching: true
+      - name: Output Information
+        run: echo "Cache used? ${{ steps.cache-deps.outputs.used_cache}}"
       - name: Install dependencies
         run: npm ci
       - name: Run server
